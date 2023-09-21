@@ -3,9 +3,9 @@ output "vpc_id" {
 }
 
 output "subnet_public_id" {
-  value = aws_subnet.mixfast_subnet_public.count[id]
+  value = [aws_subnet.mixfast_subnet_public.id]
 }
 
 output "subnet_private_id" {
-  value = aws_subnet.mixfast_subnet_private.count[id]
+  value = [aws_subnet.mixfast_subnet_private.id]
 }

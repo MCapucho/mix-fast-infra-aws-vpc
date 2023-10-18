@@ -50,7 +50,8 @@ resource "aws_route_table_association" "mixfast_route_table_association_public" 
   route_table_id = aws_route_table.mixfast_route_table.id
 }
 
-resource "aws_nat_gateway" "example" {
+resource "aws_nat_gateway" "mixfast_nat_gateway" {
   connectivity_type = "private"
-  subnet_id         = aws_subnet.mixfast_subnet_private.id
+  count             = length(var.privatesCIDRblock)
+  subnet_id         = element(aws_subnet.mixfast_subnet_private[*].id, count.index)
 }

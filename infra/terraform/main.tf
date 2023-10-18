@@ -49,3 +49,8 @@ resource "aws_route_table_association" "mixfast_route_table_association_public" 
   subnet_id      = element(aws_subnet.mixfast_subnet_public[*].id, count.index)
   route_table_id = aws_route_table.mixfast_route_table.id
 }
+
+resource "aws_nat_gateway" "example" {
+  connectivity_type = "private"
+  subnet_id         = aws_subnet.mixfast_subnet_private.id
+}

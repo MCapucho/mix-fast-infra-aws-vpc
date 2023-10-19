@@ -1,5 +1,5 @@
 variable "region" {
-  default = "us-east-2"
+  default = "us-east-1"
 }
 
 variable "tags" {
@@ -34,5 +34,5 @@ variable "publicsCIDRblock" {
 }
 variable "availabilityZone" {
   type = list
-  default = ["us-east-2a", "us-east-2b", "us-east-2c"]
+  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }

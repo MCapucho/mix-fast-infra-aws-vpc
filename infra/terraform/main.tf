@@ -85,6 +85,7 @@ resource "aws_vpc_endpoint" "ecs-agent" {
   security_group_ids  = ["sg-0a5f0bcef25218c7c"]
   subnet_ids          = aws_subnet.mixfast_subnet_private.*.id
 }
+
 resource "aws_vpc_endpoint" "ecs-telemetry" {
   vpc_id              = aws_vpc.mixfast_vpc.id
   service_name        = "com.amazonaws.${var.region}.ecs-telemetry"
@@ -92,4 +93,19 @@ resource "aws_vpc_endpoint" "ecs-telemetry" {
   private_dns_enabled = true
   security_group_ids  = ["sg-0a5f0bcef25218c7c"]
   subnet_ids          = aws_subnet.mixfast_subnet_private.*.id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "mixfast_vpc_endpoint_route_table_association_s3" {
+  route_table_id  = aws_route_table.mixfast_route_table.id
+  vpc_endpoint_id = aws_vpc_endpoint.s3.id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "mixfast_vpc_endpoint_route_table_association_ecr_dkr" {
+  route_table_id  = aws_route_table.mixfast_route_table.id
+  vpc_endpoint_id = aws_vpc_endpoint.ecr-dkr-endpoint.id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "mixfast_vpc_endpoint_route_table_association_ecr_api" {
+  route_table_id  = aws_route_table.mixfast_route_table.id
+  vpc_endpoint_id = aws_vpc_endpoint.ecr-api-endpoint.id
 }

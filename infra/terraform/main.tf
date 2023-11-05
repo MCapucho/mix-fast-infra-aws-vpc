@@ -97,15 +97,15 @@ resource "aws_vpc_endpoint" "ecs-telemetry" {
 
 resource "aws_vpc_endpoint_route_table_association" "mixfast_vpc_endpoint_route_table_association_s3" {
   route_table_id  = aws_route_table.mixfast_route_table.id
-  vpc_endpoint_id = aws_vpc_endpoint.s3
+  vpc_endpoint_id = aws_vpc_endpoint.s3.id
 }
 
 resource "aws_vpc_endpoint_route_table_association" "mixfast_vpc_endpoint_route_table_association_ecr_dkr" {
   route_table_id  = aws_route_table.mixfast_route_table.id
-  vpc_endpoint_id = aws_vpc_endpoint.ecr-dkr-endpoint
+  vpc_endpoint_id = aws_vpc_endpoint.ecr-dkr-endpoint.id
 }
 
 resource "aws_vpc_endpoint_route_table_association" "mixfast_vpc_endpoint_route_table_association_ecr_api" {
   route_table_id  = aws_route_table.mixfast_route_table.id
-  vpc_endpoint_id = aws_vpc_endpoint.ecr-api-endpoint
+  vpc_endpoint_id = aws_vpc_endpoint.ecr-api-endpoint.id
 }

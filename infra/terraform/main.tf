@@ -49,3 +49,22 @@ resource "aws_route_table_association" "mixfast_route_table_association_public" 
   subnet_id      = element(aws_subnet.mixfast_subnet_public[*].id, count.index)
   route_table_id = aws_route_table.mixfast_route_table.id
 }
+
+resource "aws_vpc_endpoint" "ecr-dkr-endpoint" {
+  vpc_id              = aws_vpc.mixfast_vpc.id
+  private_dns_enabled = true
+  service_name        = "com.amazonaws.${var.region}.ecr.dkr"
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = ["sg-0a5f0bcef25218c7c"]
+  subnet_ids          = aws_subnet.mixfast_subnet_private.*.id
+
+}
+
+resource "aws_vpc_endpoint" "ecr-api-endpoint" {
+  vpc_id              = aws_vpc.mixfast_vpc.id
+  private_dns_enabled = true
+  service_name        = "com.amazonaws.${var.region}.ecr.api"
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = ["sg-0a5f0bcef25218c7c"]
+  subnet_ids          = aws_subnet.mixfast_subnet_private.*.id
+}

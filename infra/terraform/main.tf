@@ -33,6 +33,18 @@ resource "aws_internet_gateway" "mixfast_internet_gateway" {
   tags = var.tags
 }
 
+resource "aws_eip" "gw" {
+  count      = var.privatesCIDRblock
+  vpc        = true
+  depends_on = [aws_internet_gateway.mixfast_internet_gateway]
+}
+
+resource "aws_nat_gateway" "gw" {
+  count         = var.privatesCIDRblock
+  subnet_id     = element(aws_subnet.mixfast_subnet_public.*.id, count.index)
+  allocation_id = element(aws_eip.gw.*.id, count.index)
+}
+
 resource "aws_route_table" "mixfast_route_table" {
   vpc_id = aws_vpc.mixfast_vpc.id
 
@@ -73,6 +85,23 @@ resource "aws_vpc_endpoint" "ecr-api-endpoint" {
   private_dns_enabled = true
   service_name        = "com.amazonaws.${var.region}.ecr.api"
   vpc_endpoint_type   = "Interface"
+  security_group_ids  = ["sg-0a5f0bcef25218c7c"]
+  subnet_ids          = aws_subnet.mixfast_subnet_private.*.id
+}
+
+resource "aws_vpc_endpoint" "ecs-agent" {
+  vpc_id              = aws_vpc.mixfast_vpc.id
+  service_name        = "com.amazonaws.${var.region}.ecs-agent"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  security_group_ids  = ["sg-0a5f0bcef25218c7c"]
+  subnet_ids          = aws_subnet.mixfast_subnet_private.*.id
+}
+resource "aws_vpc_endpoint" "ecs-telemetry" {
+  vpc_id              = aws_vpc.mixfast_vpc.id
+  service_name        = "com.amazonaws.${var.region}.ecs-telemetry"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
   security_group_ids  = ["sg-0a5f0bcef25218c7c"]
   subnet_ids          = aws_subnet.mixfast_subnet_private.*.id
 }

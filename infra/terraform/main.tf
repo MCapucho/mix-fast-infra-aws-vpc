@@ -33,18 +33,6 @@ resource "aws_internet_gateway" "mixfast_internet_gateway" {
   tags = var.tags
 }
 
-resource "aws_eip" "gw" {
-  count      = "3"
-  vpc        = true
-  depends_on = [aws_internet_gateway.mixfast_internet_gateway]
-}
-
-resource "aws_nat_gateway" "gw" {
-  count         = "3"
-  subnet_id     = element(aws_subnet.mixfast_subnet_public.*.id, count.index)
-  allocation_id = element(aws_eip.gw.*.id, count.index)
-}
-
 resource "aws_route_table" "mixfast_route_table" {
   vpc_id = aws_vpc.mixfast_vpc.id
 

@@ -2,10 +2,8 @@ name: 'Terraform Develop'
 
 on:
   push:
-    branches: [ "develop" ]
-  pull_request:
     branches:
-      - main
+      - develop
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

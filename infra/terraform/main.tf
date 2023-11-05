@@ -34,13 +34,13 @@ resource "aws_internet_gateway" "mixfast_internet_gateway" {
 }
 
 resource "aws_eip" "gw" {
-  count      = var.privatesCIDRblock
+  count      = "3"
   vpc        = true
   depends_on = [aws_internet_gateway.mixfast_internet_gateway]
 }
 
 resource "aws_nat_gateway" "gw" {
-  count         = var.privatesCIDRblock
+  count         = "3"
   subnet_id     = element(aws_subnet.mixfast_subnet_public.*.id, count.index)
   allocation_id = element(aws_eip.gw.*.id, count.index)
 }

@@ -50,6 +50,14 @@ resource "aws_route_table_association" "mixfast_route_table_association_public" 
   route_table_id = aws_route_table.mixfast_route_table.id
 }
 
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = aws_vpc.mixfast_vpc.id
+  service_name      = "com.amazonaws.${var.region}.s3"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids   = [aws_route_table.mixfast_route_table[0].id]
+  policy            = data.aws_iam_policy_document.s3_ecr_access.json
+}
+
 resource "aws_vpc_endpoint" "ecr-dkr-endpoint" {
   vpc_id              = aws_vpc.mixfast_vpc.id
   private_dns_enabled = true
